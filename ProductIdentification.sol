@@ -34,11 +34,15 @@ contract ProductIdentification {
     }
 
     function registerProducer() external payable {
-        require(msg.value == registrationFee, "Incorrect registration fee");
+        require(msg.value >= registrationFee, "Incorrect registration fee");
+        (bool sentToOwner,) = payable(owner).call{value: registrationFee}("");
+        require(sentToOwner, "Couldn't send the registration fee to the owner");
         registeredProducers[msg.sender] = true;
-        if (msg.value > registrationFee) {
-            payable(msg.sender).transfer(msg.value - registrationFee);
+        if (msg.value == registrationFee) {
+            return;
         }
+        (bool sentToProducer,) = payable(msg.sender).call{value: msg.value - registrationFee}("");
+        require(sentToProducer, "Couldn't send the change back to the producer");
     }
 
     function registerProduct(string calldata _name, uint256 _volume) external onlyRegisteredProducer {
