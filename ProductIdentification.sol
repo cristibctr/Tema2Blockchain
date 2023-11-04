@@ -36,6 +36,9 @@ contract ProductIdentification {
     function registerProducer() external payable {
         require(msg.value == registrationFee, "Incorrect registration fee");
         registeredProducers[msg.sender] = true;
+        if (msg.value > registrationFee) {
+            payable(msg.sender).transfer(msg.value - registrationFee);
+        }
     }
 
     function registerProduct(string calldata _name, uint256 _volume) external onlyRegisteredProducer {
