@@ -50,6 +50,16 @@ contract ProductDeposit {
         maxStorageVolume = _volume;
     }
 
+    function registerProducer() external payable {
+        require(msg.value >= storageFeePerVolumeUnit, "Incorrect storage fee");
+        require(producers[msg.sender].totalDepositedVolume == 0, "Producer is already registered");
+        uint256 volumeDeposited = msg.value / storageFeePerVolumeUnit;
+        require(producers[msg.sender].totalDepositedVolume + volumeDeposited <= maxStorageVolume, "Exceeds maximum storage volume");
+        producers[msg.sender].totalDepositedVolume += volumeDeposited;
+        totalAvailableVolume += volumeDeposited;
+        producers[msg.sender].isAuthorized = true;
+    }
+
     function registerStore() external onlyOwner {
         stores[msg.sender].isAuthorized = true;
     }
