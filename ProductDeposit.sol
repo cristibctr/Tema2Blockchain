@@ -7,13 +7,9 @@ contract ProductDeposit {
     address public owner;
     uint256 public storageFeePerVolumeUnit;
     uint256 public maxStorageVolume;
+    uint256 public  quantityOnDeposit;
 
-    struct Store {
-        string location;
-        bool isAuthorized;
-    }
-
-    mapping(address => Store) public authorizedStore;
+    mapping(address => bool) public authorizedStore;
     mapping(uint256 => uint256) public depositProduct;
 
     constructor(uint256 _storageFeePerVolumeUnit, uint256 _maxStorageVolume) {
@@ -44,19 +40,19 @@ contract ProductDeposit {
         storageFeePerVolumeUnit = _storageFeePerVolumeUnit;
     }
 
-    function setMaxStorageVolume(uint256 _maxStorageVolume) external onlyOwner {
-        require(maxStorageVolume <= _maxStorageVolume, "Maximum storage volume can't be smaller than the already deposited volume");
-        maxStorageVolume = _maxStorageVolume;
+    function setMaxStorageVolume(uint256 _volume) external onlyOwner {
+        require( quantityOnDeposit <= _volume, "Maximum storage volume can't be smaller than the already deposited volume");
+        maxStorageVolume = _volume;
     }
 
     function registerProductStorage(uint256 _productId, address _identificationOwner, uint256 _quantity) external onlyProducer(_productId, _identificationOwner) payable {
         require(msg.value >= storageFeePerVolumeUnit * _quantity, "Incorrect storage fee");
         ProductIdentification identificationContract = ProductIdentification(_identificationOwner);
-        require(identificationContract.getProductInfo(_productId).volume >= _quantity, "Incorect product quantity");
-        require(maxStorageVolume >= _quantity, "Exceeds maximum storage volume");
+        require(identificationContract.getProductInfo(_productId).volume >= _quantity + depositProduct[_productId], "Incorect product quantity");
+        require(maxStorageVolume >= _quantity + quantityOnDeposit, "Exceeds maximum storage volume");
 
         depositProduct[_productId] += _quantity;
-        maxStorageVolume -= _quantity;
+        quantityOnDeposit += _quantity;
         (bool sentToOwner,) = payable(owner).call{value: storageFeePerVolumeUnit * _quantity}("");
         require(sentToOwner, "Couldn't send the change back to the owner");
 
@@ -68,24 +64,15 @@ contract ProductDeposit {
     }
 
     // Autorizeaza / scoatere autorizare magazin
-    function registerStore(string calldata _location, bool _isAuthorized) external onlyProducer {
-        authorizedStore[msg.sender] = Store(_location, _isAuthorized);
+    function registerStore(bool isAuthorized) external onlyProducer {
+        authorizedStore[msg.sender] = isAuthorized;
     }
 
     // Producătorii pot înregistra retragerea cantităților de produse din depozitele lor
-    function producerWithdrawal(uint256 _productId, uint256 _volume) external onlyProducer {
+    function producerWithdrawal(uint256 _productId, uint256 _volume) external onlyProducer onlyStore {
         require(depositProduct[_productId] >= _volume, "Not enough volume available for withdrawal");
         depositProduct[_productId] -= _volume;
-        maxStorageVolume += _volume;
-    }
-
-    // Magazinele autorizate pot înregistra retragerea cantităților de produse din depozitele lor
-    function storeWithdrawal(uint256 _productId, string _location, uint256 _volume) external onlyStore {
-        require(authorizedStore[msg.sender].location == _location, "Unexpected store location");
-        require(authorizedStore[msg.sender].isAuthorized == true, "Store is not authorized to withdraw");
-        require(depositProduct[_productId] >= _volume, "Not enough volume available for withdrawal");
-        depositProduct[_productId] -= _volume;
-        maxStorageVolume += _volume;
+        quantityOnDeposit -= _volume;
     }
 
     // Obtine cantitatea unui produs din depozit
