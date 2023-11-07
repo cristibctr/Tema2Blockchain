@@ -5,6 +5,7 @@ import "./ProductIdentification.sol";
 
 contract ProductDeposit {
     address public owner;
+    address public identificationOwner;
     uint256 public storageFeePerVolumeUnit;
     uint256 public maxStorageVolume;
     uint256 public  quantityOnDeposit;
@@ -12,10 +13,11 @@ contract ProductDeposit {
     mapping(address => bool) public authorizedStore;
     mapping(uint256 => uint256) public depositProduct;
 
-    constructor(uint256 _storageFeePerVolumeUnit, uint256 _maxStorageVolume) {
+    constructor(uint256 _storageFeePerVolumeUnit, uint256 _maxStorageVolume, address _identificationOwner) {
         owner = msg.sender;
         storageFeePerVolumeUnit = _storageFeePerVolumeUnit;
         maxStorageVolume = _maxStorageVolume;
+        identificationOwner = _identificationOwner;
     }
 
     modifier onlyOwner() {
@@ -23,14 +25,14 @@ contract ProductDeposit {
         _;
     }
 
-    modifier onlyProducer(uint256 _productId, address _identificationOwner) {
-        ProductIdentification identificationContract = ProductIdentification(_identificationOwner);
-        require(identificationContract.getProductInfo(_productId).manufacturer == msg.sender, "Only authorized producers can call this function");
+    modifier onlyProducer() {
+        ProductIdentification identificationContract = ProductIdentification(identificationOwner);
+        require(identificationContract.isProducerRegistered(msg.sender), "Only authorized producers can call this function");
         _;
     }
 
-    modifier onlyStore(uint256 _productId, address _identificationOwner) {
-        ProductIdentification identificationContract = ProductIdentification(_identificationOwner);
+    modifier onlyStore(uint256 _productId) {
+        ProductIdentification identificationContract = ProductIdentification(identificationOwner);
         require(authorizedStore[identificationContract.getProductInfo(_productId).manufacturer] == msg.sender, "Only authorized stores can call this function");
         _;
     }
@@ -45,9 +47,9 @@ contract ProductDeposit {
         maxStorageVolume = _volume;
     }
 
-    function registerProductStorage(uint256 _productId, address _identificationOwner, uint256 _quantity) external onlyProducer(_productId, _identificationOwner) payable {
+    function registerProductStorage(uint256 _productId, uint256 _quantity) external onlyProducer payable {
         require(msg.value >= storageFeePerVolumeUnit * _quantity, "Incorrect storage fee");
-        ProductIdentification identificationContract = ProductIdentification(_identificationOwner);
+        ProductIdentification identificationContract = ProductIdentification(identificationOwner);
         require(identificationContract.getProductInfo(_productId).volume >= _quantity + depositProduct[_productId], "Incorect product quantity");
         require(maxStorageVolume >= _quantity + quantityOnDeposit, "Exceeds maximum storage volume");
 
@@ -64,12 +66,12 @@ contract ProductDeposit {
     }
 
     // Autorizeaza / scoatere autorizare magazin
-    function registerStore(bool isAuthorized) external onlyProducer {
-        authorizedStore[msg.sender] = isAuthorized;
+    function registerStore(address _addresStore) external onlyProducer {
+        authorizedStore[_addresStore] = true;
     }
 
     // Producătorii pot înregistra retragerea cantităților de produse din depozitele lor
-    function producerWithdrawal(uint256 _productId, uint256 _volume) external onlyProducer onlyStore {
+    function producerWithdrawal(uint256 _productId, uint256 _volume) external onlyProducer onlyStore(_productId) {
         require(depositProduct[_productId] >= _volume, "Not enough volume available for withdrawal");
         depositProduct[_productId] -= _volume;
         quantityOnDeposit -= _volume;
