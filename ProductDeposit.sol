@@ -31,9 +31,8 @@ contract ProductDeposit {
         _;
     }
 
-    modifier onlyStore(uint256 _productId) {
-        ProductIdentification identificationContract = ProductIdentification(identificationOwner);
-        require(authorizedStore[identificationContract.getProductInfo(_productId).manufacturer] == msg.sender, "Only authorized stores can call this function");
+    modifier onlyStore() {
+        require(authorizedStore[msg.sender], "Only authorized stores can call this function");
         _;
     }
 
@@ -71,7 +70,7 @@ contract ProductDeposit {
     }
 
     // Producătorii pot înregistra retragerea cantităților de produse din depozitele lor
-    function producerWithdrawal(uint256 _productId, uint256 _volume) external onlyProducer onlyStore(_productId) {
+    function producerWithdrawal(uint256 _productId, uint256 _volume) external onlyProducer onlyStore {
         require(depositProduct[_productId] >= _volume, "Not enough volume available for withdrawal");
         depositProduct[_productId] -= _volume;
         quantityOnDeposit -= _volume;
