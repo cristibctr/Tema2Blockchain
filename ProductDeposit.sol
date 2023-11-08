@@ -48,9 +48,8 @@ contract ProductDeposit {
     }
 
     function registerProductStorage(uint256 _productId, uint256 _quantity) external onlyProducer payable {
-        require(msg.value >= storageFeePerVolumeUnit * _quantity, "Incorrect storage fee");
         ProductIdentification identificationContract = ProductIdentification(identificationOwner);
-        require(identificationContract.getProductInfo(_productId).volume >= _quantity + depositProduct[_productId], "Incorect product quantity");
+        require(msg.value >= storageFeePerVolumeUnit * _quantity * identificationContract.getProductInfo(_productId).volume, "Incorrect storage fee");
         require(maxStorageVolume >= _quantity + quantityOnDeposit, "Exceeds maximum storage volume");
 
         depositProduct[_productId] += _quantity;

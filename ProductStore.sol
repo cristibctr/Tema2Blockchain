@@ -45,14 +45,14 @@ contract ProductStore {
         products[_productId] = Product(identificationContract.getProductInfo(_productId).name, products[_productId].quantity + _quantity, _pricePerUnit);
     }
 
-    function setPriceProduct(uint256 _productId, uint256 _pricePerUnit) external{
+    function setPriceProduct(uint256 _productId, uint256 _pricePerUnit) external onlyOwner{
         require(bytes(products[_productId].name).length != 0, "Product is not added");
         products[_productId].pricePerUnit = _pricePerUnit;
     }
 
      function isProductAuthentic(uint256 _productId) external view returns (Product memory) {
         require(bytes(products[_productId].name).length != 0, "Product doesn't exist");
-        require(products[_productId].quantity > 0, "Product is not disponible");
+        require(products[_productId].quantity > 0, "Product is not available");
         return products[_productId];
     }
 

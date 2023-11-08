@@ -1,0 +1,267 @@
+{
+	"compiler": {
+		"version": "0.8.18+commit.87f61d96"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_identificationOwner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_depositOwner",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_pricePerUnit",
+						"type": "uint256"
+					}
+				],
+				"name": "addProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "identificationOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					}
+				],
+				"name": "isProductAuthentic",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "quantity",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pricePerUnit",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct ProductStore.Product",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "products",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pricePerUnit",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_quantity",
+						"type": "uint256"
+					}
+				],
+				"name": "purchaseProduct",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_depositOwner",
+						"type": "address"
+					}
+				],
+				"name": "setAddrDepositOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_identificationOwner",
+						"type": "address"
+					}
+				],
+				"name": "setAddrIdentificationOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_pricePerUnit",
+						"type": "uint256"
+					}
+				],
+				"name": "setPriceProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"ProductStore.sol": "ProductStore"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"ProductDeposit.sol": {
+			"keccak256": "0x8609362bb1c2616b06b353fae5503e91329066710716aebc9646e616c71f0fb3",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://cce5c281c8c06337629c98c73be19270550ae7ce649374939894d80ebf7375f0",
+				"dweb:/ipfs/QmS8e5Fn53kuURfcN5xCi5fNoNCfdqjPmTptn5GR6wVP6E"
+			]
+		},
+		"ProductIdentification.sol": {
+			"keccak256": "0xeb4e3d685ccb37ebf37ecff5a6d566789212f459a020962eb457d9a369f5b729",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ad527671480658498e637ad82ff32c570664367b0eb4c097b41a7a8f6e9ad52c",
+				"dweb:/ipfs/QmU8m4xCW4RDMt2ApUrhbVe9qidZHc5Xv7RQAwsnjkipPg"
+			]
+		},
+		"ProductStore.sol": {
+			"keccak256": "0x269f7180a04d582f4fe2aec5cd6f5253a4b10d546f3819408da0692dc9141eda",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1db36acabf0db2ca42da613a11d5b687038f55a9b5a2abea3e07c72d1d704e3b",
+				"dweb:/ipfs/QmYuBjFMpQtJ6gPiVj8KADr7Wz7bVPkUykVQixovY5UjAd"
+			]
+		}
+	},
+	"version": 1
+}
