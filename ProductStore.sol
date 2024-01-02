@@ -61,13 +61,13 @@ contract ProductStore {
         require(bytes(products[_productId].name).length != 0, "Product doesn't exist");
         require(_quantity <= products[_productId].quantity, "Quantity product demand is too high");
         require(msg.value >= products[_productId].pricePerUnit * _quantity, "Insufficient payment");
+        products[_productId].quantity -= _quantity;
         
         (bool sentToProducer,) = payable(identificationContract.getProductInfo(_productId).manufacturer).call{value : products[_productId].pricePerUnit * _quantity / 2}("");
         require(sentToProducer, "Couldn't send the change back to the producer");
         (bool sentToOwner,) = payable(owner).call{value : products[_productId].pricePerUnit * _quantity / 2}("");
         require(sentToOwner, "Couldn't send the change back to the owner");
        
-        products[_productId].quantity -= _quantity;
         if (msg.value == products[_productId].pricePerUnit * _quantity) {
             return ;
         }
