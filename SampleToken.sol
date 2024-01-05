@@ -45,8 +45,8 @@ contract SampleToken {
     }
 
     function transferFrom(address _from, address _to, uint256 _value) external returns (bool success) {
-        require(_value <= balanceOf[_from]);
-        require(_value <= allowance[_from][msg.sender]);
+        require(_value <= balanceOf[_from], "Not enough tokens");
+        require(_value <= allowance[_from][msg.sender], "Not allowed to transfer enough tokens");
 
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;

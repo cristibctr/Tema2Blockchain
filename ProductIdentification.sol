@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <=0.8.21;
+import "./SampleToken.sol";
 
 contract ProductIdentification {
     address public owner;
@@ -7,6 +8,7 @@ contract ProductIdentification {
     mapping(address => bool) public registeredProducers;
     mapping(uint256 => Product) public registeredProducts;
     uint256 public productCount;
+    SampleToken public sampleToken;
 
     struct Product {
         address manufacturer;
@@ -24,25 +26,20 @@ contract ProductIdentification {
         _;
     }
 
-    constructor(uint256 _registrationFee) {
+    constructor(uint256 _registrationFee, SampleToken _sampleToken) {
         owner = msg.sender;
         registrationFee = _registrationFee;
+        sampleToken = _sampleToken;
     }
 
     function setRegistrationFee(uint256 _fee) external onlyOwner {
         registrationFee = _fee;
     }
 
-    function registerProducer() external payable {
-        require(msg.value >= registrationFee, "Incorrect registration fee");
-        (bool sentToOwner,) = payable(owner).call{value: registrationFee}("");
-        require(sentToOwner, "Couldn't send the registration fee to the owner");
+    function registerProducer() external {
+        sampleToken.transferFrom(msg.sender, address(this), registrationFee);
+        sampleToken.transfer(owner, registrationFee);
         registeredProducers[msg.sender] = true;
-        if (msg.value == registrationFee) {
-            return;
-        }
-        (bool sentToProducer,) = payable(msg.sender).call{value: msg.value - registrationFee}("");
-        require(sentToProducer, "Couldn't send the change back to the producer");
     }
 
     function registerProduct(string calldata _name, uint256 _volume) external onlyRegisteredProducer {

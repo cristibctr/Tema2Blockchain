@@ -31,7 +31,6 @@ contract SampleTokenSale {
 
     function buyTokens(uint256 _numberOfTokens) external payable {
         require(msg.value >= _numberOfTokens * tokenPrice);
-        require(tokenContract.balanceOf(address(this)) >= _numberOfTokens);
         require(tokenContract.transferFrom(owner, msg.sender, _numberOfTokens));
         emit Sell(msg.sender, _numberOfTokens);
         tokensSold += _numberOfTokens;

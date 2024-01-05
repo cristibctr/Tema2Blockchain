@@ -9,89 +9,77 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_registrationFee",
+						"name": "_initialSupply",
 						"type": "uint256"
-					},
-					{
-						"internalType": "contract SampleToken",
-						"name": "_sampleToken",
-						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
 			{
+				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_spender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
 						"internalType": "uint256",
-						"name": "_productId",
+						"name": "_value",
 						"type": "uint256"
 					}
 				],
-				"name": "getProductInfo",
-				"outputs": [
+				"name": "Approval",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
 					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "manufacturer",
-								"type": "address"
-							},
-							{
-								"internalType": "string",
-								"name": "name",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "volume",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct ProductIdentification.Product",
-						"name": "",
-						"type": "tuple"
+						"indexed": true,
+						"internalType": "address",
+						"name": "_from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "_value",
+						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
+				"name": "Transfer",
+				"type": "event"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_producer",
-						"type": "address"
-					}
-				],
-				"name": "isProducerRegistered",
-				"outputs": [
-					{
-						"internalType": "bool",
 						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
+						"type": "address"
+					},
 					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "productCount",
+				"name": "allowance",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -103,27 +91,26 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "registerProducer",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "_name",
-						"type": "string"
+						"internalType": "address",
+						"name": "_spender",
+						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "_volume",
+						"name": "_value",
 						"type": "uint256"
 					}
 				],
-				"name": "registerProduct",
-				"outputs": [],
+				"name": "approve",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -135,82 +122,119 @@
 						"type": "address"
 					}
 				],
-				"name": "registeredProducers",
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "decimals",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "name",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "symbol",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
 				"outputs": [
 					{
 						"internalType": "bool",
-						"name": "",
+						"name": "success",
 						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "registeredProducts",
-				"outputs": [
 					{
 						"internalType": "address",
-						"name": "manufacturer",
+						"name": "_from",
 						"type": "address"
 					},
 					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "volume",
+						"name": "_value",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "registrationFee",
+				"name": "transferFrom",
 				"outputs": [
 					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "sampleToken",
-				"outputs": [
-					{
-						"internalType": "contract SampleToken",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_fee",
-						"type": "uint256"
-					}
-				],
-				"name": "setRegistrationFee",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			}
@@ -228,7 +252,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"ProductIdentification.sol": "ProductIdentification"
+			"SampleToken.sol": "SampleToken"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -242,14 +266,6 @@
 		"remappings": []
 	},
 	"sources": {
-		"ProductIdentification.sol": {
-			"keccak256": "0x5a4f272ac25338366da5d7c2b884a0f52fe7dc269308760f71e620c4b866be4f",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://5399a90470f119b8b633888767f9d5c20e11275b00a653f49e18215f8e57b5f8",
-				"dweb:/ipfs/QmdbMS2VVkTANXjVEDohHmveGgTdidffo7oRCZwg6dwNvm"
-			]
-		},
 		"SampleToken.sol": {
 			"keccak256": "0x773a30ad6532cc4c96d47f5d549a9889394547658d0fa759e68a275f68f9f573",
 			"license": "MIT",
