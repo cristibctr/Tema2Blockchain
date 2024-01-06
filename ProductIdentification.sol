@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <=0.8.21;
-import "./SampleToken.sol";
+import './SampleToken.sol';
 
 contract ProductIdentification {
     address public owner;
     uint256 public registrationFee;
+
     mapping(address => bool) public registeredProducers;
     mapping(uint256 => Product) public registeredProducts;
+    mapping(string => uint256) public brandProducts;
+
     uint256 public productCount;
     SampleToken public sampleToken;
 
@@ -45,6 +48,7 @@ contract ProductIdentification {
     function registerProduct(string calldata _name, uint256 _volume) external onlyRegisteredProducer {
         productCount++;
         registeredProducts[productCount] = Product(msg.sender, _name, _volume);
+        brandProducts[_name] = productCount;
     }
 
     function isProducerRegistered(address _producer) external view returns (bool) {
@@ -52,7 +56,11 @@ contract ProductIdentification {
     }
 
     function getProductInfo(uint256 _productId) external view returns (Product memory) {
+        require(registeredProducts[_productId].manufacturer != address(0), "Product not registered");
         return registeredProducts[_productId];
     }
-}
 
+    function getBrandInfo(string calldata _name) external view returns (uint256){
+        return brandProducts[_name];
+    }
+}
