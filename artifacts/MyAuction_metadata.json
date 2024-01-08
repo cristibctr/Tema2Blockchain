@@ -9,12 +9,27 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_registrationFee",
+						"name": "_biddingTime",
 						"type": "uint256"
 					},
 					{
-						"internalType": "contract SampleToken",
-						"name": "_sampleToken",
+						"internalType": "address payable",
+						"name": "_owner",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_brand",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_Rnumber",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "_identificationOwner",
 						"type": "address"
 					}
 				],
@@ -22,88 +37,132 @@
 				"type": "constructor"
 			},
 			{
+				"anonymous": false,
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"name": "brandProducts",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "_name",
-						"type": "string"
-					}
-				],
-				"name": "getBrandInfo",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_productId",
-						"type": "uint256"
-					}
-				],
-				"name": "getProductInfo",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "manufacturer",
-								"type": "address"
-							},
-							{
-								"internalType": "string",
-								"name": "name",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "volume",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct ProductIdentification.Product",
-						"name": "",
-						"type": "tuple"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
+						"indexed": true,
 						"internalType": "address",
-						"name": "_producer",
+						"name": "highestBidder",
 						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "highestBid",
+						"type": "uint256"
 					}
 				],
-				"name": "isProducerRegistered",
+				"name": "BidEvent",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "message",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"name": "CanceledEvent",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "withdrawer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "WithdrawalEvent",
+				"type": "event"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
+				"inputs": [],
+				"name": "Mycar",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "Brand",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "Rnumber",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "STATE",
+				"outputs": [
+					{
+						"internalType": "enum Auction.auction_state",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "auction_end",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "auction_start",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_token",
+						"type": "uint256"
+					}
+				],
+				"name": "bid",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -111,57 +170,6 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "productCount",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "registerProducer",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "_name",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_volume",
-						"type": "uint256"
-					}
-				],
-				"name": "registerProduct",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -173,40 +181,11 @@
 						"type": "address"
 					}
 				],
-				"name": "registeredProducers",
+				"name": "bids",
 				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "registeredProducts",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "manufacturer",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "volume",
 						"type": "uint256"
 					}
 				],
@@ -215,12 +194,77 @@
 			},
 			{
 				"inputs": [],
-				"name": "registrationFee",
+				"name": "cancel_auction",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "destruct_auction",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "get_owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "highestBid",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "highestBidder",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "identificationOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -240,17 +284,21 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
+				"inputs": [],
+				"name": "withdraw",
+				"outputs": [
 					{
-						"internalType": "uint256",
-						"name": "_fee",
-						"type": "uint256"
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
-				"name": "setRegistrationFee",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
 			}
 		],
 		"devdoc": {
@@ -266,7 +314,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"ProductIdentification.sol": "ProductIdentification"
+			"MyAuction.sol": "MyAuction"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -280,6 +328,14 @@
 		"remappings": []
 	},
 	"sources": {
+		"MyAuction.sol": {
+			"keccak256": "0xb498a95845ed2b732cdf5cde53d4719dae7738765e056c1e5936aa0c9d09d6c8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ba6a88acac5adfe61b57b177170e144ffc2cab7283507429d7360fa87dbd8b6c",
+				"dweb:/ipfs/QmSUk9pmwGCWJKRmCFJT1TVsmZQTVXXwK8gKAPRGgypcCN"
+			]
+		},
 		"ProductIdentification.sol": {
 			"keccak256": "0x39eb0687916d48dc58a92b93c4d0bf59900d579b5dd5606919562eb23e4d5073",
 			"license": "MIT",

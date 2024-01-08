@@ -38,7 +38,7 @@ contract Auction {
     }
     
     modifier only_owner() {
-        require(msg.sender==auction_owner);
+        require(msg.sender==auction_owner, "You are not the owner");
         _;
     }
     
@@ -54,9 +54,10 @@ contract Auction {
 
 contract MyAuction is Auction {
     
-    constructor (uint _biddingTime, address payable _owner, string memory _brand, string memory _Rnumber, address _identificationOwner) {
+    constructor (uint _biddingTime, address payable _owner, string memory _brand, string memory _Rnumber, address _identificationOwner, address _sampleToken) {
         identificationOwner = _identificationOwner;
         ProductIdentification identificationContract = ProductIdentification(identificationOwner);
+        sampleToken = SampleToken(_sampleToken);
         require(identificationContract.getBrandInfo(_brand) > 0, "This brand doesn't exist in ProductIdentification");
         
         auction_owner = _owner;
@@ -104,6 +105,7 @@ contract MyAuction is Auction {
     function withdraw() public override returns (bool) {
         
         require(block.timestamp > auction_end || STATE == auction_state.CANCELLED,"You can't withdraw, the auction is still open");
+        require(highestBidder != msg.sender, "You can't withdraw if you won");
         uint amount;
         amount = bids[msg.sender];
         bids[msg.sender] = 0;
