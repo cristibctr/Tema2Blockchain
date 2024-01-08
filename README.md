@@ -5,7 +5,7 @@
 To get started with these contracts:
 
 1. Clone the repository:
-git clone https://github.com/cristibctr/SmartSupplyChain
+git clone https://github.com/cristibctr/Tema2Blockchain
 2. Upload it to remix
 3. Profit???
 
