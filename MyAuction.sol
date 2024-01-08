@@ -81,6 +81,10 @@ contract MyAuction is Auction {
     
     function bid() public payable an_ongoing_auction override returns (bool) {
       
+        for(uint i = 0; i < bidders.length; i++)
+        {
+            require(bidders[i] != msg.sender,"You've already made a bid");
+        }
         require(bids[msg.sender] + msg.value > highestBid,"You can't bid, Make a higher Bid");
         highestBidder = msg.sender;
         highestBid = bids[msg.sender] + msg.value;
@@ -118,12 +122,11 @@ contract MyAuction is Auction {
         require(block.timestamp > auction_end || STATE == auction_state.CANCELLED,"You can't destruct the contract,The auction is still open");
         for(uint i = 0; i < bidders.length; i++)
         {
-            assert(bids[bidders[i]] == 0);
+            if(bids[bidders[i]] != 0 && bidders[i] != highestBidder)
+            sampleToken.transferFrom(address(this), msg.sender, bids[bidders[i]]);
         }
         selfdestruct(auction_owner);
         return true;
     
     } 
 }
-
-
