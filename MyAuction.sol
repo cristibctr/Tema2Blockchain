@@ -42,7 +42,7 @@ contract Auction {
         _;
     }
     
-    function bid() public virtual payable returns (bool) {}
+    function bid(uint256 _token) public virtual returns (bool) {}
     function withdraw() public virtual returns (bool) {}
     function cancel_auction() external virtual returns (bool) {}
     
@@ -79,19 +79,16 @@ contract MyAuction is Auction {
         
     }
     
-    function bid() public payable an_ongoing_auction override returns (bool) {
+    function bid(uint256 _token) public an_ongoing_auction override returns (bool) {
       
-        for(uint i = 0; i < bidders.length; i++)
-        {
-            require(bidders[i] != msg.sender,"You've already made a bid");
-        }
-        require(bids[msg.sender] + msg.value > highestBid,"You can't bid, Make a higher Bid");
+        require(bids[msg.sender] == 0, "You already made a bid");
+        require(_token > highestBid,"You can't bid, Make a higher Bid");
         highestBidder = msg.sender;
-        highestBid = bids[msg.sender] + msg.value;
+        highestBid = _token;
         bidders.push(msg.sender);
         bids[msg.sender] = highestBid;
 
-        sampleToken.transfer(address(this), msg.value);
+        sampleToken.transferFrom(msg.sender, address(this), _token);
         emit BidEvent(highestBidder,  highestBid);
 
         return true;
@@ -111,7 +108,7 @@ contract MyAuction is Auction {
         amount = bids[msg.sender];
         bids[msg.sender] = 0;
         
-        sampleToken.transferFrom(address(this), msg.sender, amount);
+        sampleToken.transfer(msg.sender, amount);
         emit WithdrawalEvent(msg.sender, amount);
 
         return true;
@@ -123,7 +120,7 @@ contract MyAuction is Auction {
         for(uint i = 0; i < bidders.length; i++)
         {
             if(bids[bidders[i]] != 0 && bidders[i] != highestBidder)
-            sampleToken.transferFrom(address(this), msg.sender, bids[bidders[i]]);
+            sampleToken.transfer(msg.sender, bids[bidders[i]]);
         }
         selfdestruct(auction_owner);
         return true;
